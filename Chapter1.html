@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Title of the document</title>
+</head>
+
+<body>
+<h3>생성자 대신 정적 팩토리 메서드를 사용 할 수 없는지 생각해 보라</h3>
+<p>
+<pre>
+	eg)<br>
+	public static Boolean valueOf(boolean b) {<br>
+		return b ? Boolean.TRUE : Boolean.FALSE;<br>
+	}
+</pre>
+</p>
+<h4>1. 생성자와 달리 정적 팩토리 메서드에는 이름이 있다.</h4>
+<h4>2. 생성자와는 달리 호출할 때마다 새로운 객체를 생성할 필요가 없다.</h4>
+<h4>3. 반환값 자료형의 하위 자료형 객체를 반환 할 수 있다.</h4>
+<p>&nbsp Collections.emptyList()</p>
+</body>
+
+</html>
