@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chapter02</title>
+<meta charset="utf-8">
+<style type="text/css">
+    body {
+        background-color: #e7e7e7;
+    }
+    div {
+        width: 700px;
+        border: 1px solid; padding: 5px;
+        margin: 10px;
+    }
+    #div1 {background-color: #FFFFFF;}
+    #div2 {background-color: #69F354;}
+    #div3 {background-color: #36FFFF;}
+     
+    span {
+        width: 100px; height: 20px;
+        border: 1px solid; padding: 5px;
+        margin: 10px;
+    }
+    #span1 {background-color: #F9F249; padding: 5px;}
+    #span2 {background-color: #69F354;}
+    #span3 {background-color: #36FFFF;}
+</style>
+</head>
+
+<body>
+<h2>생성자 대신 정적 팩토리 메서드를 사용 할 수 없는지 생각해 보라</h3>
+<h3>장점<h3>
+<h4>1. 생성자와 달리 정적 팩토리 메서드에는 이름이 있다.</h4>
+<div>
+<b>eg)</b>
+<p>
+<pre>
+  public static Boolean valueOf(boolean b) {<br>
+	return b ? Boolean.TRUE : Boolean.FALSE;<br>
+  }
+</pre>
+</p>
+</div>
+<h4>2. 생성자와는 달리 호출할 때마다 새로운 객체를 생성할 필요가 없다.</h4>
+<h4>3. 반환값 자료형의 하위 자료형 객체를 반환 할 수 있다.</h4>
+<div>
+<p>&nbsp; Collections.emptyList()</p>
+&nbsp;<a href="http://gyrfalcon.tistory.com/entry/Java-Reflection">&nbsp;reflection</a> 
+</div>
+<div id="div1">
+<pre>
+// Service Interface
+public interface Service {
+    // Put unique methods of service
+}
+
+// Service Provider
+public interface Provider {
+    Service newService();
+}
+
+// A class for registering and accessing that cannot be with construct
+
+public class Services {
+    private Services() {} // 객체 생성 방지
+    
+    private static final Map&lt;String, Provider&gt; providers = 
+        new ConcurrentHashMap&lt;String, Provider&gt;();
+    public static final String DEFAULT_PROVIDER_NAME = "&lt;def&gt;";
+
+    public static void registerDefaultProvider(Provider p) {
+        registerProvider(DEFAULT_PROVIDER_NAME, p);
+    }
+
+    public static void registerProvider(String name, Provider p) {
+        providers.put(name, p);
+    }
+
+    public static Service newInstance() {
+        return newInstance(DEFAULT_PROVIDER_NAME);
+    }
+    
+    public static Service newInstance() {
+        Provider p = Providers.get(name);
+        if(p == null) {
+            throw IllegalArgumentException("No provider");
+        }
+        return p.newService();
+    }
+}
+<br>
+</pre>
+</div>
+<h4>4. Paramterized type 을 만들기 쉽다 .</h4>
+<div>
+<p>
+&nbsp;Map&lt;String, List&lt;String&gt; m = new HashMap&lt;String, List&lt;String&gt;&gt;();
+</p>
+&nbsp;아래 와 같은 static 함수가 있으면 타입 유추가 더 쉬울 수 있다. <br>
+&nbsp;하지만 java 7 부터는 생성자에서 타입 유추 지원 <br>
+&nbsp;Map&lt;String, List&lt;String&gt; m = new HashMap&lt;&gt;();
+<pre>
+ public static HashMap&lt;k,v&gt; newInstance() {
+    return new HashMap&lt;k,v&gt;();
+ }
+</pre>
+</div>
+<h3>단점</h4>
+<h4>1. public 이나 protected 로 선언된 생성자가 없음으로 하위 클래스를 만들 수 없다.</h4>
+<h4>2. 정적 팩토리 메서드가 다른 정적 메서드와 확연히 구분되지 않는다는 것  </h4>
+<div>
+<p>&#42;valueOf: 단순하게 말하자면, 인자로 주어진 값과 값은 값을 갖는 객체 <br>
+&nbsp;를 반환한단는 뜻. 따라서 이런 정적 팩터리 메서드는 형변환 메서드<br>
+</p>
+<p>&#42;of: valueOf를 더 간다하게 쓴것 EnumSet 덕분에 인기를 모음 <br></p>
+<p>&#42;getInstance: 인자에 기술된 객체를 반환 인자와 같은 값을 가지지 <br>
+&nbsp; 않을 수 있음. 싱글톤 
+</p>
+<p>&#42;newInstance: 호출 시 매번 다른 객체를 생성 <br>
+</p>
+
+</div>
+</body>
+</html>
